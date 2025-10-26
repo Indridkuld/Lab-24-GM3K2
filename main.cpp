@@ -3,6 +3,9 @@
 #include <iomanip>
 #include <list>
 #include <random>
+#include <ctime>
+#include <cstdlib>
+#include <string>
 #include "Goat.h"
 using namespace std;
 
@@ -30,6 +33,32 @@ int main() {
     while (fin1 >> colors[i++]);
     fin1.close();
 
+    // main program loop
+    list<Goat> trip;
+    do {
+        int choice = main_menu();
+        switch (choice) {
+            case 1:
+                add_goat(trip, names, colors);
+                break;
+            case 2:
+                delete_goat(trip);
+                break;
+            case 3:
+                display_trip(trip);
+                break;
+            case 4:
+                cout << "Goodbye!" << endl;
+                return 0;
+        }
+        cout << "Would you like to perform another operation? (1 for yes / 0 for no): ";
+        cin >> again;
+        // validate input
+        while (again != 0 && again != 1) {
+            cout << "Invalid input. Please enter 1 for yes or 0 for no: ";
+            cin >> again;
+        }
+    } while (again);
 
     return 0;
 }
@@ -50,14 +79,12 @@ int main_menu() {
 
     return choice;
 }
-int add_goat(list<Goat> &trip, string n[], string c[]) {
+void add_goat(list<Goat> &trip, string n[], string c[]) {
     // generate random variables from mains arrays
-    string n = n[rand() % SZ_NAMES];
+    string name = n[rand() % SZ_NAMES];
     int age = rand() % MAX_AGE + 1;
-    string c = c[rand() % SZ_COLORS];
-    Goat new_goat(n, age, c);
+    string color= c[rand() % SZ_COLORS];
+    Goat new_goat(name, age, color);
     trip.push_back(new_goat);
 
-    return 0;
 }
-
