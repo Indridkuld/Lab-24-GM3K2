@@ -27,7 +27,7 @@ int main() {
     int i = 0;
     while (fin >> names[i++]);
     fin.close();
-    ifstream fin1("colors.txt")
+    ifstream fin1("colors.txt");
     string colors[SZ_COLORS];
     i = 0;
     while (fin1 >> colors[i++]);
@@ -35,7 +35,7 @@ int main() {
 
     // main program loop
     list<Goat> trip;
-    do 
+    do {
         int choice = main_menu();
         switch (choice) {
             case 1:
@@ -57,7 +57,7 @@ int main() {
         while (again != 0 && again != 1) {
             cout << "Invalid input. Please enter 1 for yes or 0 for no: ";
             cin >> again;
-        }
+        };
     } while (again);
 
     return 0;
