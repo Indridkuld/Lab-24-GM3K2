@@ -50,6 +50,13 @@ int main_menu() {
     return choice;
 }
 int add_goat(list<Goat> &trip, string [], string []); {
-    
+    // generate random variables from mains arrays
+    string name = names[rand() % SZ_NAMES];
+    int age = rand() % MAX_AGE + 1;
+    string color = colors[rand() % SZ_COLORS];
+    Goat new_goat(name, age, color);
+    trip.push_back(new_goat);
+
+    return 0;
 }
 
