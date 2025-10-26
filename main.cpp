@@ -92,7 +92,7 @@ void add_goat(list<Goat> &trip, string n[], string c[]) {
 int select_goat(list<Goat> trip) {
     cout << "Select a goat to delete:\n";
     int i = 0;
-    for (const auto &goat : trip) {
+    for (const Goat &goat : trip) {
         cout << "[" << i++ << "] "
              << "Name: " << goat.get_name() << ", "
              << "Age: " << goat.get_age() << ", "
@@ -113,7 +113,7 @@ void delete_goat(list<Goat> &trip) {
         return;
     }
     int i = select_goat(trip);
-    auto it = trip.begin();
+    list<Goat>::iterator it = trip.begin();
     advance(it, i);
     trip.erase(it);
     cout << "Goat deleted." << endl;
@@ -124,7 +124,7 @@ void display_trip(list<Goat> trip) {
         return;
     }
     cout << "\n *** GOAT TRIP LIST *** \n";
-    for (const auto &goat : trip) {
+    for (const Goat &goat : trip) {
         cout << "Name: " << goat.get_name() << ", "
              << "Age: " << goat.get_age() << ", "
              << "Color: " << goat.get_color() << endl;
