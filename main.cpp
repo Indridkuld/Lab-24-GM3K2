@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iomanip>
 #include <list>
+#include <random>
 #include "Goat.h"
 using namespace std;
 
@@ -49,12 +50,12 @@ int main_menu() {
 
     return choice;
 }
-int add_goat(list<Goat> &trip, string [], string []); {
+int add_goat(list<Goat> &trip, string n[], string c[]) {
     // generate random variables from mains arrays
-    string name = names[rand() % SZ_NAMES];
+    string n = n[rand() % SZ_NAMES];
     int age = rand() % MAX_AGE + 1;
-    string color = colors[rand() % SZ_COLORS];
-    Goat new_goat(name, age, color);
+    string c = c[rand() % SZ_COLORS];
+    Goat new_goat(n, age, c);
     trip.push_back(new_goat);
 
     return 0;
