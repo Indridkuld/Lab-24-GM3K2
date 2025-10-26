@@ -30,8 +30,26 @@ int main() {
     fin1.close();
 
 
-
-
     return 0;
+}
+int main_menu() {
+    int choice;
+    cout << "\n *** GOAT MANAGER 3001 *** \n"
+         << "[1] Add a goat\n"
+         << "[2] Delete a goat\n"
+         << "[3] List goats\n"
+         << "[4] Quit\n"
+         << "Choice --> ";
+    // validate input
+    cin >> choice;
+    while (choice < 1 || choice > 4) {
+        cout << "Invalid choice. Please enter a number between 1 and 4: ";
+        cin >> choice;
+    }
+
+    return choice;
+}
+int add_goat(list<Goat> &trip, string [], string []); {
+    
 }
 
