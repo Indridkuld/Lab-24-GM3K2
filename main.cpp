@@ -154,4 +154,5 @@ void display_trip(set<Goat> trip) { // display all goats in the trip
              << "Age: " << goat.get_age() << ", "
              << "Color: " << goat.get_color() << endl;
     }
+}
 
