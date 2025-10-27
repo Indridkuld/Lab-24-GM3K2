@@ -26,8 +26,9 @@ public:
     string get_color() const        { return color; }
 
     // write overloaded < operator for the std::list
-    bool operator< (const Goat &other) const {
-        return name < other.name;
+    // orders by name, then age, then color
+    bool operator<(const Goat& other) const {
+        return std::tie(name, age, color) < std::tie(other.name, other.age, other.color);
     }
 };
 #endif
