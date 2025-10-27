@@ -39,7 +39,7 @@ int main() {
 
     ifstream fin1("colors.txt");
     if (!fin1) {
-        cerr << "Error: Could not open names.txt" << endl;
+        cerr << "Error: Could not open colors.txt" << endl;
         return 1;
     }
     string colors[SZ_COLORS];
@@ -88,12 +88,12 @@ int main_menu() { // display menu and get user choice
          << "[3] List goats\n"
          << "[4] Quit\n"
          << "Choice --> ";
-    // validate input
     cin >> choice; 
     // checks for valid input including non-integer
     while (choice < 1 || choice > 4 || cin.fail()) {
         cout << "Invalid choice. Please enter a number between 1 and 4: ";
         cin.clear(); 
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear input buffer
         cin >> choice;
     }
 
@@ -111,7 +111,7 @@ void add_goat(set<Goat> &trip, string n[], string c[], int nCount, int cCount) {
     string color= c[rand() % cCount];
 
     Goat new_goat(name, age, color);
-    trip.insert(new_goat);
+    trip.emplace(new_goat);
 
 }
 int select_goat(const set<Goat> &trip) { // select a goat to delete
@@ -125,12 +125,14 @@ int select_goat(const set<Goat> &trip) { // select a goat to delete
     }
     int choice;
     cin >> choice;
-    // validate input
-    while (choice < 0 || choice >= trip.size()) {
+    //  better input validation using static cast to avoid signed/unsigned comparison, as set.size() returns unsigned, didn't know this before
+    while (cin.fail() || choice < 1 || choice > static_cast<int>(trip.size())) {
         cout << "Invalid choice. Please enter a valid index: ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear input buffer
         cin >> choice;
     }
-    return choice;
+    return choice -1 ; // adjust for 0-based index
 }
 void delete_goat(set<Goat> &trip) { // delete a goat from the trip uses select_goat function
     if (trip.empty()) {
