@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <list>
 #include <random>
+#include <limits>
 #include <ctime>
 #include <cstdlib>
 #include <string>
@@ -11,14 +12,14 @@ using namespace std;
 
 const int SZ_NAMES = 200, SZ_COLORS = 25, MAX_AGE = 20;
 
-int select_goat(list<Goat> trip);
+int select_goat(const list<Goat> &trip);
 void delete_goat(list<Goat> &trip);
 void add_goat(list<Goat> &trip, string [], string [], int, int);
 void display_trip(list<Goat> trip);
 int main_menu();
 
 int main() {
-    srand(static_cast<unsigned>(time(nullptr))); // seed random number generator
+    srand(static_cast<unsigned>(time(nullptr))); // seed random number generator 
     bool again;
 
     // read & populate arrays for names and colors
@@ -87,11 +88,14 @@ int main_menu() {
          << "[3] List goats\n"
          << "[4] Quit\n"
          << "Choice --> ";
-    // validate input
-    cin >> choice;
-    while (choice < 1 || choice > 4) {
+    // robust validate input (handles non-integer input)
+    while (true) {
+        if (cin >> choice) {
+            if (choice >= 1 && choice <= 4) break;
+        }
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid choice. Please enter a number between 1 and 4: ";
-        cin >> choice;
     }
 
     return choice;
@@ -111,23 +115,26 @@ void add_goat(list<Goat> &trip, string n[], string c[], int nCount, int cCount) 
     trip.push_back(new_goat);
 
 }
-int select_goat(list<Goat> trip) {
+int select_goat(const list<Goat> &trip) {
     cout << "Select a goat to delete:\n";
-    int i = 0;
+    int idx = 1;
     for (const Goat &goat : trip) {
-        cout << "[" << i++ << "] "
-             << "Name: " << goat.get_name() << ", "
-             << "Age: " << goat.get_age() << ", "
-             << "Color: " << goat.get_color() << endl;
+        cout << "[" << idx << "] "
+             << goat.get_name() << " (" << goat.get_age() << ", " << goat.get_color() << ")" << endl;
+        ++idx;
     }
     int choice;
-    cin >> choice;
-    // validate input
-    while (choice < 0 || choice >= trip.size()) {
+    int maxIndex = idx - 1;
+    // robust validation: require integer in range [1, maxIndex]
+    while (true) {
+        if (cin >> choice) {
+            if (choice >= 1 && choice <= maxIndex) break;
+        }
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid choice. Please enter a valid index: ";
-        cin >> choice;
     }
-    return choice;
+    return choice - 1; // convert to 0-based index for use with iterators
 }
 void delete_goat(list<Goat> &trip) {
     if (trip.empty()) {
