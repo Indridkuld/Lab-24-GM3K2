@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <list>
+#include <set>
 #include <random>
 #include <ctime>
 #include <cstdlib>
@@ -11,10 +11,10 @@ using namespace std;
 
 const int SZ_NAMES = 200, SZ_COLORS = 25, MAX_AGE = 20;
 
-int select_goat(const list<Goat> &trip);
-void delete_goat(list<Goat> &trip);
-void add_goat(list<Goat> &trip, string [], string [], int, int);
-void display_trip(list<Goat> trip);
+int select_goat(const set<Goat> &trip);
+void delete_goat(set<Goat> &trip);
+void add_goat(set<Goat> &trip, string [], string [], int, int);
+void display_trip(set<Goat> trip);
 int main_menu();
 
 int main() {
@@ -52,7 +52,7 @@ int main() {
     fin1.close();
 
     // main program loop
-    list<Goat> trip;
+    set<Goat> trip;
     do {
         int choice = main_menu(); // get user menu choice
         switch (choice) {
@@ -99,7 +99,7 @@ int main_menu() { // display menu and get user choice
 
     return choice;
 }
-void add_goat(list<Goat> &trip, string n[], string c[], int nCount, int cCount) { // add a new goat to the trip, used the count variables to avoid going out of bounds
+void add_goat(set<Goat> &trip, string n[], string c[], int nCount, int cCount) { // add a new goat to the trip, used the count variables to avoid going out of bounds
     // empty bounds check 
     if (nCount == 0 || cCount == 0) {
         cout << "Error: Name or color list is empty. Cannot add goat." << endl;
@@ -111,10 +111,10 @@ void add_goat(list<Goat> &trip, string n[], string c[], int nCount, int cCount) 
     string color= c[rand() % cCount];
 
     Goat new_goat(name, age, color);
-    trip.push_back(new_goat);
+    trip.insert(new_goat);
 
 }
-int select_goat(const list<Goat> &trip) { // select a goat to delete
+int select_goat(const set<Goat> &trip) { // select a goat to delete
     cout << "Select a goat to delete:\n";
     int i = 1;
     for (const Goat &goat : trip) {
@@ -132,18 +132,18 @@ int select_goat(const list<Goat> &trip) { // select a goat to delete
     }
     return choice;
 }
-void delete_goat(list<Goat> &trip) { // delete a goat from the trip uses select_goat function
+void delete_goat(set<Goat> &trip) { // delete a goat from the trip uses select_goat function
     if (trip.empty()) {
         cout << "No goats to delete." << endl;
         return;
     }
     int i = select_goat(trip);
-    list<Goat>::iterator it = trip.begin();
-    advance(it, i);
-    trip.erase(it);
+    set<Goat>::iterator it = trip.begin();
+    advance(it, i); // used advance as iterators for list and set don't normally support arithmetic, prob not the fully correct way but works here
+    trip.erase(it); 
     cout << "Goat deleted." << endl;
 }
-void display_trip(list<Goat> trip) { // display all goats in the trip
+void display_trip(set<Goat> trip) { // display all goats in the trip
     if (trip.empty()) {
         cout << "No goats in the trip." << endl;
         return;
