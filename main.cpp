@@ -3,7 +3,6 @@
 #include <iomanip>
 #include <list>
 #include <random>
-#include <limits>
 #include <ctime>
 #include <cstdlib>
 #include <string>
@@ -19,10 +18,11 @@ void display_trip(list<Goat> trip);
 int main_menu();
 
 int main() {
-    srand(static_cast<unsigned>(time(nullptr))); // seed random number generator 
+    srand(static_cast<unsigned>(time(nullptr))); // seed random number generator using current time
     bool again;
 
-    // read & populate arrays for names and colors
+    // read & populate arrays for names and , had to change slightly as I kept getting errors, turned out to be missing file checks
+    // and scope errors as vscode needed the txt files to be in output directory
     ifstream fin("names.txt");
     if (!fin) {
         cerr << "Error: Could not open names.txt" << endl;
@@ -54,7 +54,7 @@ int main() {
     // main program loop
     list<Goat> trip;
     do {
-        int choice = main_menu();
+        int choice = main_menu(); // get user menu choice
         switch (choice) {
             case 1:
                 add_goat(trip, names, colors, nCount, cCount);
@@ -80,7 +80,7 @@ int main() {
 
     return 0;
 }
-int main_menu() {
+int main_menu() { // display menu and get user choice
     int choice;
     cout << "\n *** GOAT MANAGER 3001 *** \n"
          << "[1] Add a goat\n"
@@ -88,19 +88,18 @@ int main_menu() {
          << "[3] List goats\n"
          << "[4] Quit\n"
          << "Choice --> ";
-    // robust validate input (handles non-integer input)
-    while (true) {
-        if (cin >> choice) {
-            if (choice >= 1 && choice <= 4) break;
-        }
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    // validate input
+    cin >> choice; 
+    // checks for valid input including non-integer
+    while (choice < 1 || choice > 4 || cin.fail()) {
         cout << "Invalid choice. Please enter a number between 1 and 4: ";
+        cin.clear(); 
+        cin >> choice;
     }
 
     return choice;
 }
-void add_goat(list<Goat> &trip, string n[], string c[], int nCount, int cCount) {
+void add_goat(list<Goat> &trip, string n[], string c[], int nCount, int cCount) { // add a new goat to the trip, used the count variables to avoid going out of bounds
     // empty bounds check 
     if (nCount == 0 || cCount == 0) {
         cout << "Error: Name or color list is empty. Cannot add goat." << endl;
@@ -115,28 +114,25 @@ void add_goat(list<Goat> &trip, string n[], string c[], int nCount, int cCount) 
     trip.push_back(new_goat);
 
 }
-int select_goat(const list<Goat> &trip) {
+int select_goat(const list<Goat> &trip) { // select a goat to delete
     cout << "Select a goat to delete:\n";
-    int idx = 1;
+    int i = 1;
     for (const Goat &goat : trip) {
-        cout << "[" << idx << "] "
-             << goat.get_name() << " (" << goat.get_age() << ", " << goat.get_color() << ")" << endl;
-        ++idx;
+        cout << "[" << i++ << "] "
+             << "Name: " << goat.get_name() << ", "
+             << "Age: " << goat.get_age() << ", "
+             << "Color: " << goat.get_color() << endl;
     }
     int choice;
-    int maxIndex = idx - 1;
-    // robust validation: require integer in range [1, maxIndex]
-    while (true) {
-        if (cin >> choice) {
-            if (choice >= 1 && choice <= maxIndex) break;
-        }
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin >> choice;
+    // validate input
+    while (choice < 0 || choice >= trip.size()) {
         cout << "Invalid choice. Please enter a valid index: ";
+        cin >> choice;
     }
-    return choice - 1; // convert to 0-based index for use with iterators
+    return choice;
 }
-void delete_goat(list<Goat> &trip) {
+void delete_goat(list<Goat> &trip) { // delete a goat from the trip uses select_goat function
     if (trip.empty()) {
         cout << "No goats to delete." << endl;
         return;
@@ -147,7 +143,7 @@ void delete_goat(list<Goat> &trip) {
     trip.erase(it);
     cout << "Goat deleted." << endl;
 }
-void display_trip(list<Goat> trip) {
+void display_trip(list<Goat> trip) { // display all goats in the trip
     if (trip.empty()) {
         cout << "No goats in the trip." << endl;
         return;
