@@ -27,5 +27,4 @@ public:
 
     // write overloaded < operator for the std::list
 };
-
 #endif
