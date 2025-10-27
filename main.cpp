@@ -13,7 +13,7 @@ const int SZ_NAMES = 200, SZ_COLORS = 25, MAX_AGE = 20;
 
 int select_goat(list<Goat> trip);
 void delete_goat(list<Goat> &trip);
-void add_goat(list<Goat> &trip, string [], string []);
+void add_goat(list<Goat> &trip, string [], string [], int, int);
 void display_trip(list<Goat> trip);
 int main_menu();
 
@@ -48,7 +48,7 @@ int main() {
         int choice = main_menu();
         switch (choice) {
             case 1:
-                add_goat(trip, names, colors);
+                add_goat(trip, names, colors, nCount, cCount);
                 break;
             case 2:
                 delete_goat(trip);
@@ -95,9 +95,9 @@ void add_goat(list<Goat> &trip, string n[], string c[], int nCount, int cCount) 
         return;
     } 
     // generate random variables from mains arrays
-    string name = n[rand() % SZ_NAMES];
+    string name = n[rand() % nCount];
     int age = rand() % MAX_AGE + 1;
-    string color= c[rand() % SZ_COLORS];
+    string color= c[rand() % cCount];
 
     Goat new_goat(name, age, color);
     trip.push_back(new_goat);
