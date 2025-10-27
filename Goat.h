@@ -31,4 +31,5 @@ public:
         return std::tie(name, age, color) < std::tie(other.name, other.age, other.color);
     }
 };
+
 #endif
