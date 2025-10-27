@@ -23,6 +23,10 @@ int main() {
 
     // read & populate arrays for names and colors
     ifstream fin("names.txt");
+    if (!fin) {
+        cerr << "Error: Could not open names.txt" << endl;
+        return 1;
+    }
     string names[SZ_NAMES];
     int nCount = 0;
     if (fin) { // added check for file open
@@ -33,6 +37,10 @@ int main() {
     fin.close();
 
     ifstream fin1("colors.txt");
+    if (!fin1) {
+        cerr << "Error: Could not open names.txt" << endl;
+        return 1;
+    }
     string colors[SZ_COLORS];
     int cCount = 0;
     if (fin1) { // added check for file open
