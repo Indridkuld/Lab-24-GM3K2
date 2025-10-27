@@ -18,19 +18,28 @@ void display_trip(list<Goat> trip);
 int main_menu();
 
 int main() {
-    srand(static_cast<unsigned>(time(nullptr)));
+    srand(static_cast<unsigned>(time(nullptr))); // seed random number generator
     bool again;
 
     // read & populate arrays for names and colors
     ifstream fin("names.txt");
     string names[SZ_NAMES];
-    int i = 0;
-    while (fin >> names[i++]);
+    int nCount = 0;
+    if (fin) { // added check for file open
+        while (nCount < SZ_NAMES && (fin >> names[nCount])) { // added check for array bounds
+            ++nCount;
+        }   
+    }
     fin.close();
+
     ifstream fin1("colors.txt");
     string colors[SZ_COLORS];
-    i = 0;
-    while (fin1 >> colors[i++]);
+    int cCount = 0;
+    if (fin1) { // added check for file open
+        while (cCount < SZ_COLORS && (fin1 >> colors[cCount])) { // added check for array bounds
+            ++cCount;
+        }
+    }    
     fin1.close();
 
     // main program loop
@@ -79,7 +88,12 @@ int main_menu() {
 
     return choice;
 }
-void add_goat(list<Goat> &trip, string n[], string c[]) {
+void add_goat(list<Goat> &trip, string n[], string c[], int nCount, int cCount) {
+    // empty bounds check 
+    if (nCount == 0 || cCount == 0) {
+        cout << "Error: Name or color list is empty. Cannot add goat." << endl;
+        return;
+    } 
     // generate random variables from mains arrays
     string name = n[rand() % SZ_NAMES];
     int age = rand() % MAX_AGE + 1;
